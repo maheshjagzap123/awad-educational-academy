@@ -16,8 +16,13 @@ export default function Layout({ children }) {
   return (
     <>
       <ScrollToTop />
+      <a href="#main" className="skip-link">
+        Skip to main content
+      </a>
       <Navbar />
-      <main id="main">{children}</main>
+      <main id="main" tabIndex={-1}>
+        {children}
+      </main>
       <Footer />
       <MobileCTA />
     </>

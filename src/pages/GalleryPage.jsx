@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Image as ImageIcon } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Image as ImageIcon, ArrowRight } from "lucide-react";
 import Layout from "../components/layout/Layout";
 import PageHero from "../components/ui/PageHero";
 import EmptyState from "../components/ui/EmptyState";
@@ -11,8 +12,12 @@ export default function GalleryPage() {
   useSeo({
     title: "Gallery | Awad Educational Academy, Kaij",
     description:
-      "Photographs of Awad Educational Academy — classrooms, students, events and activities in Kaij, Beed.",
+      "Photographs of Awad Educational Academy — the campus, classrooms, students, events and activities in Kaij, Beed, Maharashtra.",
     path: "/gallery",
+    breadcrumbs: [
+      { name: "Home", path: "/" },
+      { name: "Gallery", path: "/gallery" },
+    ],
   });
 
   const [filter, setFilter] = useState("All");
@@ -40,7 +45,16 @@ export default function GalleryPage() {
               </div>
               <div className="gallery-grid">
                 {shown.map((img, i) => (
-                  <img key={i} src={img.src} alt={img.alt || "Awad Educational Academy"} loading="lazy" />
+                  <img
+                    key={i}
+                    src={img.src}
+                    alt={
+                      img.alt ||
+                      `Awad Educational Academy${img.category ? ` — ${img.category}` : ""}, Kaij, Beed`
+                    }
+                    loading="lazy"
+                    decoding="async"
+                  />
                 ))}
               </div>
             </>
@@ -51,6 +65,11 @@ export default function GalleryPage() {
               message="Real photographs of the academy, classrooms, students, events and activities will be added here soon."
             />
           )}
+          <div className="text-center" style={{ marginTop: 32 }}>
+            <Link to="/about" className="btn btn--outline">
+              Learn More About the Academy <ArrowRight size={17} />
+            </Link>
+          </div>
         </div>
       </section>
     </Layout>

@@ -39,8 +39,14 @@ export default function HomePage() {
   useSeo({
     title: "Awad Educational Academy | Education & Classes in Kaij, Beed",
     description:
-      "Awad Educational Academy is a professional educational institute in Kaij, Beed, Maharashtra. Explore our courses, faculty and results. Enquire today.",
+      "Awad Educational Academy is an educational institute in Kaij, Beed, Maharashtra. Explore courses, faculty, results and contact information. Enquire today.",
     path: "/",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: siteConfig.name,
+      url: siteConfig.siteUrl || undefined,
+    },
   });
 
   const confirmedCourses = courses.filter((c) => c.confirmed);

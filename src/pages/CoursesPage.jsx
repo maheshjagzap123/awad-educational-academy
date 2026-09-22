@@ -11,8 +11,12 @@ export default function CoursesPage() {
   useSeo({
     title: "Courses & Classes | Awad Educational Academy, Kaij",
     description:
-      "Explore the courses and classes offered by Awad Educational Academy in Kaij, Beed, Maharashtra. Enquire now.",
+      "Explore the courses and classes offered by Awad Educational Academy in Kaij, Beed, Maharashtra. Contact the academy to enquire about admissions.",
     path: "/courses",
+    breadcrumbs: [
+      { name: "Home", path: "/" },
+      { name: "Courses", path: "/courses" },
+    ],
   });
 
   const confirmed = courses.filter((c) => c.confirmed);

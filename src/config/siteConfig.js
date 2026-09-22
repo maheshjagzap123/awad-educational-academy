@@ -10,6 +10,33 @@
 // change when content is added.
 // ============================================================
 
+// ------------------------------------------------------------
+// SITE URL RESOLUTION
+//
+// The canonical/production domain is read from an environment
+// variable so it can be changed in one place when the academy's
+// final custom domain is connected — nothing is hardcoded.
+//
+//   • Set VITE_SITE_URL in a .env file (see .env.example), or
+//   • Configure it in the Vercel project settings.
+//
+// Until a real domain is set, we fall back to the current Vercel
+// deployment URL so canonical/OG/sitemap links still resolve.
+// Trailing slashes are stripped for consistency.
+// ------------------------------------------------------------
+const FALLBACK_SITE_URL = "https://awad-educational-academy.vercel.app";
+
+function resolveSiteUrl() {
+  const fromEnv =
+    typeof import.meta !== "undefined" && import.meta.env
+      ? import.meta.env.VITE_SITE_URL
+      : undefined;
+  const raw = (fromEnv || FALLBACK_SITE_URL || "").trim();
+  return raw.replace(/\/+$/, "");
+}
+
+export const SITE_URL = resolveSiteUrl();
+
 export const siteConfig = {
   // --- BRAND (verified) ---
   name: "Awad Educational Academy",
@@ -58,8 +85,13 @@ export const siteConfig = {
   ],
 
   // --- SEO ---
-  siteUrl: "", // set to final domain when available
-  ogImage: "/logo.png",
+  // Resolved from VITE_SITE_URL (falls back to the current Vercel URL).
+  // Do NOT hardcode the final domain here — set it via the env var.
+  siteUrl: SITE_URL,
+  locale: "en_IN",
+  ogImage: "/logo.png", // 1200x630 social preview recommended (see remaining items)
+  ogImageAlt: "Awad Educational Academy — educational institute in Kaij, Beed, Maharashtra",
+  twitterCard: "summary_large_image",
 
   // --- THEME (derived from logo) ---
   theme: {
@@ -72,5 +104,56 @@ export const siteConfig = {
 export const hasWhatsApp = Boolean(siteConfig.whatsapp);
 export const hasEmail = Boolean(siteConfig.email);
 export const hasMap = Boolean(siteConfig.googleMapsEmbed);
+
+// ------------------------------------------------------------
+// STRUCTURED DATA (JSON-LD) — verified information only.
+//
+// No ratings, reviews, opening hours, social profiles, courses,
+// faculty, or achievements are added until the academy confirms
+// them (see WEBSITE-SPECIFICATION.md §17 & §23).
+// ------------------------------------------------------------
+
+/** Postal address block reused by organization schema. */
+export const postalAddress = {
+  "@type": "PostalAddress",
+  streetAddress:
+    "Ground Floor, Rangoli Dresses, Prof. Dr. Vithal Awad, Kaij–Sabla Road",
+  addressLocality: siteConfig.city,
+  addressRegion: siteConfig.state,
+  postalCode: siteConfig.pin,
+  addressCountry: "IN",
+};
+
+/**
+ * EducationalOrganization schema. `sameAs` is added ONLY when the
+ * academy confirms official social/business profiles.
+ */
+export function organizationJsonLd() {
+  const sameAs = [
+    siteConfig.googleBusinessUrl,
+    siteConfig.instagram,
+    siteConfig.facebook,
+    siteConfig.youtube,
+  ].filter(Boolean);
+
+  const org = {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    name: siteConfig.name,
+    description: siteConfig.description,
+    telephone: siteConfig.phone,
+    url: siteConfig.siteUrl || undefined,
+    logo: siteConfig.siteUrl
+      ? `${siteConfig.siteUrl}${siteConfig.logo}`
+      : undefined,
+    image: siteConfig.siteUrl
+      ? `${siteConfig.siteUrl}${siteConfig.ogImage}`
+      : undefined,
+    address: postalAddress,
+  };
+  if (sameAs.length) org.sameAs = sameAs;
+  if (siteConfig.email) org.email = siteConfig.email;
+  return org;
+}
 
 export default siteConfig;

@@ -2,18 +2,51 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#0f2a52" />
+
+    <!-- Icons & site identity -->
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="apple-touch-icon" href="/logo.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!--
+      These are STATIC fallback tags used by crawlers before the SPA
+      hydrates. Once React mounts, src/hooks/useSeo.js sets per-page
+      title / description / canonical / Open Graph / Twitter tags.
+      The home-page values are mirrored here so the crawlable HTML is
+      correct even without JS.
+    -->
     <title>Awad Educational Academy | Education & Classes in Kaij, Beed</title>
     <meta
       name="description"
-      content="Awad Educational Academy is a professional educational institute in Kaij, Beed, Maharashtra. Explore our courses, faculty and results. Enquire today."
+      content="Awad Educational Academy is an educational institute in Kaij, Beed, Maharashtra. Explore courses, faculty, results and contact information. Enquire today."
     />
-    <meta property="og:title" content="Awad Educational Academy | Kaij, Beed" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph -->
+    <meta property="og:site_name" content="Awad Educational Academy" />
+    <meta property="og:title" content="Awad Educational Academy | Education & Classes in Kaij, Beed" />
+    <meta
+      property="og:description"
+      content="Awad Educational Academy is an educational institute in Kaij, Beed, Maharashtra. Explore courses, faculty, results and contact information."
+    />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="/logo.png" />
-    <meta name="twitter:card" content="summary" />
+    <meta
+      property="og:image:alt"
+      content="Awad Educational Academy — educational institute in Kaij, Beed, Maharashtra"
+    />
+    <meta property="og:locale" content="en_IN" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Awad Educational Academy | Education & Classes in Kaij, Beed" />
+    <meta
+      name="twitter:description"
+      content="Awad Educational Academy is an educational institute in Kaij, Beed, Maharashtra."
+    />
+    <meta name="twitter:image" content="/logo.png" />
 
     <!--
       Structured data uses ONLY verified information (name, address, phone).

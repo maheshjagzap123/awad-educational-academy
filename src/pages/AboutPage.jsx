@@ -12,8 +12,13 @@ export default function AboutPage() {
   useSeo({
     title: "About Awad Educational Academy | Kaij, Beed",
     description:
-      "Learn about Awad Educational Academy, an educational institute in Kaij, Beed, Maharashtra.",
+      "Learn about Awad Educational Academy, an educational institute in Kaij, Beed, Maharashtra — our location, teaching approach and how to get in touch.",
     path: "/about",
+    type: "profile",
+    breadcrumbs: [
+      { name: "Home", path: "/" },
+      { name: "About", path: "/about" },
+    ],
   });
 
   return (

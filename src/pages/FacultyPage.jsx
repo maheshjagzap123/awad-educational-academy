@@ -1,6 +1,7 @@
+import { Link } from "react-router-dom";
 import Layout from "../components/layout/Layout";
 import PageHero from "../components/ui/PageHero";
-import { Users } from "lucide-react";
+import { Users, ArrowRight } from "lucide-react";
 import FacultyCard from "../components/ui/FacultyCard";
 import EmptyState from "../components/ui/EmptyState";
 import Reveal from "../components/ui/Reveal";
@@ -12,8 +13,12 @@ export default function FacultyPage() {
   useSeo({
     title: "Faculty | Awad Educational Academy, Kaij",
     description:
-      "Meet the faculty of Awad Educational Academy in Kaij, Beed, Maharashtra.",
+      "Meet the teachers behind Awad Educational Academy in Kaij, Beed, Maharashtra. Verified faculty profiles are published as the academy shares them.",
     path: "/faculty",
+    breadcrumbs: [
+      { name: "Home", path: "/" },
+      { name: "Faculty", path: "/faculty" },
+    ],
   });
 
   const confirmed = faculty.filter((f) => f.confirmed !== false);
@@ -38,6 +43,11 @@ export default function FacultyPage() {
               message="Verified profiles of our teachers — names, subjects, qualifications and experience — will be published here soon."
             />
           )}
+          <div className="text-center" style={{ marginTop: 32 }}>
+            <Link to="/contact" className="btn btn--outline">
+              Contact Awad Educational Academy <ArrowRight size={17} />
+            </Link>
+          </div>
         </div>
       </section>
     </Layout>

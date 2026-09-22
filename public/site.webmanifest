@@ -1,0 +1,19 @@
+{
+  "name": "Awad Educational Academy",
+  "short_name": "AWAD Academy",
+  "description": "Educational institute in Kaij, Beed, Maharashtra.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0f2a52",
+  "lang": "en-IN",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

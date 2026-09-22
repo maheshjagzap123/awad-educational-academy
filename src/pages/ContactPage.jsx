@@ -13,8 +13,12 @@ export default function ContactPage() {
   useSeo({
     title: "Contact Awad Educational Academy | Kaij, Beed",
     description:
-      "Contact Awad Educational Academy, Kaij, Beed, Maharashtra. Call, message or send an enquiry about our courses.",
+      "Contact Awad Educational Academy in Kaij, Beed, Maharashtra. Call +91 94221 05262 or send an enquiry about courses and admissions.",
     path: "/contact",
+    breadcrumbs: [
+      { name: "Home", path: "/" },
+      { name: "Contact", path: "/contact" },
+    ],
   });
 
   const [params] = useSearchParams();

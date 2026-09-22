@@ -1,4 +1,5 @@
-import { Award, Trophy, Medal } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Award, Trophy, Medal, ArrowRight } from "lucide-react";
 import Layout from "../components/layout/Layout";
 import PageHero from "../components/ui/PageHero";
 import SectionHeading from "../components/ui/SectionHeading";
@@ -11,8 +12,12 @@ export default function ResultsPage() {
   useSeo({
     title: "Results & Achievements | Awad Educational Academy",
     description:
-      "Verified academic results and achievements of students at Awad Educational Academy, Kaij, Beed.",
+      "Verified academic results and student achievements at Awad Educational Academy, Kaij, Beed, Maharashtra. Published only as the academy confirms them.",
     path: "/results",
+    breadcrumbs: [
+      { name: "Home", path: "/" },
+      { name: "Results & Achievements", path: "/results" },
+    ],
   });
 
   return (
@@ -101,6 +106,11 @@ export default function ResultsPage() {
               showCta={false}
             />
           )}
+          <div className="text-center" style={{ marginTop: 32 }}>
+            <Link to="/about" className="btn btn--outline">
+              Learn More About the Academy <ArrowRight size={17} />
+            </Link>
+          </div>
         </div>
       </section>
     </Layout>

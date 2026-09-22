@@ -13,8 +13,18 @@ export default function CourseDetailPage() {
 
   useSeo({
     title: `${course ? course.name : "Course"} | Awad Educational Academy`,
-    description: course?.shortDescription || "Course details at Awad Educational Academy, Kaij, Beed.",
+    description:
+      course?.shortDescription ||
+      "Course details at Awad Educational Academy, Kaij, Beed, Maharashtra. Contact the academy to enquire.",
     path: `/courses/${slug}`,
+    // Unconfirmed placeholder courses should not be indexed until the
+    // academy provides real details; confirmed courses are indexable.
+    robots: course?.confirmed ? "index, follow" : "noindex, follow",
+    breadcrumbs: [
+      { name: "Home", path: "/" },
+      { name: "Courses", path: "/courses" },
+      { name: course ? course.name : "Course", path: `/courses/${slug}` },
+    ],
   });
 
   if (!course) {

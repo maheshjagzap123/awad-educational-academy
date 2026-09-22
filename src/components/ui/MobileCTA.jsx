@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Phone, MessageCircle } from "lucide-react";
 import siteConfig, { hasWhatsApp } from "../../config/siteConfig";
 import "./MobileCTA.css";
@@ -22,9 +23,9 @@ export default function MobileCTA() {
           <MessageCircle size={19} /> WhatsApp
         </a>
       ) : (
-        <a href="/contact" className="mcta__btn mcta__btn--enquiry">
+        <Link to="/contact" className="mcta__btn mcta__btn--enquiry">
           <MessageCircle size={19} /> Enquire
-        </a>
+        </Link>
       )}
     </div>
   );

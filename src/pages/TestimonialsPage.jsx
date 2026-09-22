@@ -11,8 +11,12 @@ export default function TestimonialsPage() {
   useSeo({
     title: "Student & Parent Testimonials | Awad Educational Academy",
     description:
-      "Genuine feedback from students and parents of Awad Educational Academy, Kaij, Beed.",
+      "Genuine, academy-approved feedback from students and parents of Awad Educational Academy in Kaij, Beed, Maharashtra.",
     path: "/testimonials",
+    breadcrumbs: [
+      { name: "Home", path: "/" },
+      { name: "Testimonials", path: "/testimonials" },
+    ],
   });
 
   const confirmed = testimonials.filter((t) => t.confirmed !== false);
