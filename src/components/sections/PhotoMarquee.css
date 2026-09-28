@@ -1,0 +1,135 @@
+.marquee-section {
+  overflow: hidden;
+}
+.marquee__head {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.marquee__title {
+  margin: 14px 0 8px;
+}
+.marquee__subtitle {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+/* Fade the strip edges so images glide in/out instead of hard-cutting */
+.marquee {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 8%,
+    #000 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 8%,
+    #000 92%,
+    transparent 100%
+  );
+}
+
+.marquee__row {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  will-change: transform;
+}
+.marquee__row--left {
+  animation: marquee-left 42s linear infinite;
+}
+.marquee__row--right {
+  animation: marquee-right 48s linear infinite;
+}
+
+/* Pause when the visitor hovers or focuses within the strip */
+.marquee:hover .marquee__row,
+.marquee:focus-within .marquee__row {
+  animation-play-state: paused;
+}
+
+.marquee__item {
+  position: relative;
+  flex: 0 0 auto;
+  width: 300px;
+  height: 200px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  background: var(--bg-soft);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+.marquee__item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(15, 42, 82, 0.06);
+  pointer-events: none;
+}
+.marquee__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+.marquee__item:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md, 0 14px 30px rgba(15, 42, 82, 0.16));
+}
+.marquee__item:hover img {
+  transform: scale(1.06);
+}
+.marquee__item:focus-visible {
+  outline: 3px solid var(--azure, #2196e8);
+  outline-offset: 2px;
+}
+
+@keyframes marquee-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes marquee-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .marquee__item {
+    width: 220px;
+    height: 150px;
+  }
+}
+
+/* Accessibility: no motion for users who ask for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .marquee__row {
+    animation: none;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+  }
+  /* Hide the duplicated copies so images don't appear twice */
+  .marquee__item--dup {
+    display: none;
+  }
+}

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { MapPin, Phone, Mail } from "lucide-react";
-import siteConfig, { hasEmail } from "../../config/siteConfig";
+import siteConfig, { hasEmail, directionsUrl } from "../../config/siteConfig";
 import navLinks from "../../data/navigation";
 import "./Footer.css";
 
@@ -34,7 +34,9 @@ export default function Footer() {
           <ul className="footer__contact">
             <li>
               <MapPin size={18} />
-              <span>{siteConfig.address}</span>
+              <a href={directionsUrl} target="_blank" rel="noopener noreferrer">
+                {siteConfig.address}
+              </a>
             </li>
             <li>
               <Phone size={18} />

@@ -106,6 +106,26 @@ export const hasEmail = Boolean(siteConfig.email);
 export const hasMap = Boolean(siteConfig.googleMapsEmbed);
 
 // ------------------------------------------------------------
+// MAPS / DIRECTIONS
+//
+// These work from the verified address alone — no API key or
+// place ID required. If the academy later provides an exact
+// Google Maps place link, set `googleMapsUrl` (for the button)
+// and/or `googleMapsEmbed` (for the iframe) and those take over.
+// ------------------------------------------------------------
+const mapsQuery = encodeURIComponent(`${siteConfig.name}, ${siteConfig.address}`);
+
+/** Opens turn-by-turn directions to the academy from the user's location. */
+export const directionsUrl =
+  siteConfig.googleMapsUrl ||
+  `https://www.google.com/maps/dir/?api=1&destination=${mapsQuery}`;
+
+/** A search-based embed so a map still shows before an exact place link is set. */
+export const mapEmbedUrl =
+  siteConfig.googleMapsEmbed ||
+  `https://www.google.com/maps?q=${mapsQuery}&output=embed`;
+
+// ------------------------------------------------------------
 // STRUCTURED DATA (JSON-LD) — verified information only.
 //
 // No ratings, reviews, opening hours, social profiles, courses,

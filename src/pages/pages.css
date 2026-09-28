@@ -138,3 +138,29 @@
 .empty-block {
   padding: 8px 0 4px;
 }
+
+/* About management cards */
+.about-mgmt {
+  text-align: center;
+}
+.about-mgmt__photo {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+}
+
+/* Map directions link */
+.map-directions-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--azure-600, #1877c9);
+}
+.map-directions-link:hover {
+  text-decoration: underline;
+}

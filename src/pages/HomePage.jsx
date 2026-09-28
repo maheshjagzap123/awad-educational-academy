@@ -11,19 +11,22 @@ import {
   Image as ImageIcon,
   Phone,
   MessageCircle,
+  MapPin,
+  Navigation,
 } from "lucide-react";
 import Layout from "../components/layout/Layout";
 import Hero from "../components/sections/Hero";
 import TrustStrip from "../components/sections/TrustStrip";
 import Process from "../components/sections/Process";
+import PhotoMarquee from "../components/sections/PhotoMarquee";
 import SectionHeading from "../components/ui/SectionHeading";
 import CourseCard from "../components/ui/CourseCard";
 import FacultyCard from "../components/ui/FacultyCard";
 import EmptyState from "../components/ui/EmptyState";
 import Reveal from "../components/ui/Reveal";
 import useSeo from "../hooks/useSeo";
-import siteConfig, { hasWhatsApp } from "../config/siteConfig";
-import { courses, whyChooseUs, faculty, testimonials } from "../data/content";
+import siteConfig, { hasWhatsApp, directionsUrl, mapEmbedUrl } from "../config/siteConfig";
+import { courses, whyChooseUs, faculty, testimonials, galleryImages } from "../data/content";
 import "./HomePage.css";
 
 const iconMap = {
@@ -33,6 +36,7 @@ const iconMap = {
   Compass,
   Lightbulb,
   HeartHandshake,
+  Award,
 };
 
 export default function HomePage() {
@@ -208,30 +212,78 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Section 8 — Gallery preview */}
-      <section className="section">
+      {/* Section 8 — Gallery preview (premium auto-scrolling strip) */}
+      {galleryImages.length ? (
+        <PhotoMarquee
+          eyebrow="Gallery"
+          title="A Glimpse of Our Academy"
+          subtitle="Moments from classrooms, sessions and student life at Awad Educational Academy."
+        />
+      ) : (
+        <section className="section">
+          <div className="container">
+            <Reveal>
+              <div className="feature-panel">
+                <span className="results-badge">
+                  <ImageIcon size={30} />
+                </span>
+                <h2>A Glimpse of Our Academy</h2>
+                <p>
+                  Photographs of the academy, classrooms, students, events and activities will be
+                  added here.
+                </p>
+                <Link to="/gallery" className="btn btn--primary">
+                  View Gallery <ArrowRight size={17} />
+                </Link>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      )}
+
+      {/* How to Join */}
+      <Process />
+
+      {/* Section — Location / Map */}
+      <section className="section section--soft">
         <div className="container">
+          <SectionHeading
+            eyebrow="Visit Us"
+            title="Find the Academy"
+            subtitle={`${siteConfig.city}, ${siteConfig.district}, ${siteConfig.state}`}
+            center
+          />
           <Reveal>
-            <div className="feature-panel">
-              <span className="pill" style={{ marginBottom: 14 }}>Gallery</span>
-              <span className="results-badge">
-                <ImageIcon size={30} />
-              </span>
-              <h2>A Glimpse of Our Academy</h2>
-              <p>
-                Photographs of the academy, classrooms, students, events and activities will be
-                added here.
-              </p>
-              <Link to="/gallery" className="btn btn--primary">
-                View Gallery <ArrowRight size={17} />
-              </Link>
+            <div className="home-map">
+              <iframe
+                className="home-map__frame"
+                src={mapEmbedUrl}
+                title={`${siteConfig.name} location map`}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
+              <div className="home-map__info">
+                <span className="home-map__icon">
+                  <MapPin size={22} />
+                </span>
+                <p className="home-map__address">{siteConfig.address}</p>
+                <a
+                  href={directionsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn--primary"
+                >
+                  <Navigation size={18} /> Get Directions
+                </a>
+                <a href={`tel:${siteConfig.phoneRaw}`} className="btn btn--outline">
+                  <Phone size={18} /> {siteConfig.phone}
+                </a>
+              </div>
             </div>
           </Reveal>
         </div>
       </section>
-
-      {/* How to Join */}
-      <Process />
 
       {/* Section 9 — Contact / Enquiry CTA */}
       <section className="cta-band">

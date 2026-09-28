@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { MapPin, Phone, Mail, MessageCircle, Send } from "lucide-react";
+import { MapPin, Phone, Mail, MessageCircle, Send, Navigation } from "lucide-react";
 import Layout from "../components/layout/Layout";
 import PageHero from "../components/ui/PageHero";
-import ComingSoon from "../components/ui/ComingSoon";
 import useSeo from "../hooks/useSeo";
-import siteConfig, { hasEmail, hasWhatsApp, hasMap } from "../config/siteConfig";
+import siteConfig, {
+  hasEmail,
+  hasWhatsApp,
+  directionsUrl,
+  mapEmbedUrl,
+} from "../config/siteConfig";
 import { courses } from "../data/content";
 import "./pages.css";
 
@@ -78,6 +82,14 @@ export default function ContactPage() {
               <a href={`tel:${siteConfig.phoneRaw}`} className="btn btn--primary">
                 <Phone size={18} /> Call Now
               </a>
+              <a
+                href={directionsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn--outline"
+              >
+                <Navigation size={18} /> Get Directions
+              </a>
               {waHref && (
                 <a href={waHref} target="_blank" rel="noopener noreferrer" className="btn btn--outline">
                   <MessageCircle size={18} /> WhatsApp
@@ -86,17 +98,22 @@ export default function ContactPage() {
             </div>
 
             <div style={{ marginTop: 26 }}>
-              {hasMap ? (
-                <iframe
-                  className="map-embed"
-                  src={siteConfig.googleMapsEmbed}
-                  title={`${siteConfig.name} location`}
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
-              ) : (
-                <ComingSoon message="The academy's verified Google Maps location will be embedded here once confirmed." />
-              )}
+              <iframe
+                className="map-embed"
+                src={mapEmbedUrl}
+                title={`${siteConfig.name} location map`}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
+              <a
+                href={directionsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="map-directions-link"
+              >
+                <Navigation size={16} /> Open in Google Maps for directions
+              </a>
             </div>
           </div>
 
