@@ -1,0 +1,20 @@
+# ------------------------------------------------------------
+# Cloudflare Pages configuration — Awad Educational Academy
+#
+# Used by `wrangler pages deploy` and the Cloudflare dashboard.
+# For a dashboard (Git-connected) deployment, set the same values
+# under the project's Build & deployments settings:
+#
+#   Framework preset:  Vite
+#   Build command:     npm run build
+#   Build output dir:  dist
+#   Node version:      20  (set NODE_VERSION=20 env var if needed)
+#
+# Set VITE_SITE_URL in the Pages project environment variables to
+# your final domain so canonical URLs, sitemap.xml and robots.txt
+# point at the right place (e.g. https://awadeducationalacademy.com).
+# ------------------------------------------------------------
+
+name = "awad-educational-academy"
+compatibility_date = "2024-11-01"
+pages_build_output_dir = "dist"

@@ -1,0 +1,5 @@
+# Cloudflare Pages SPA fallback.
+# React Router handles routing on the client, so every path that is not a
+# real static file must serve index.html (HTTP 200) instead of 404ing.
+# Files in /public are copied to the build output (dist), so this ships as-is.
+/*    /index.html   200
