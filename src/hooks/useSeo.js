@@ -2,6 +2,28 @@ import { useEffect } from "react";
 import siteConfig, { SITE_URL } from "../config/siteConfig";
 
 /**
+ * SSR / prerender capture.
+ *
+ * During client rendering the hook mutates document.head inside a
+ * useEffect (see below). That effect never runs on the server, so the
+ * build-time prerender (scripts/prerender.mjs) instead reads the SEO
+ * values captured here — synchronously, while each page renders — to
+ * build a real, crawlable <head> for every route.
+ *
+ * `captureSeo` is a no-op cost on the client; it only matters when a
+ * prerender collector is attached via `setSeoCollector`.
+ */
+let seoCollector = null;
+
+export function setSeoCollector(fn) {
+  seoCollector = fn;
+}
+
+function captureSeo(resolved) {
+  if (seoCollector) seoCollector(resolved);
+}
+
+/**
  * Lightweight, dependency-free SEO hook for this Vite + React SPA.
  *
  * On each route it keeps the document head in sync:
@@ -103,10 +125,40 @@ export default function useSeo({
   breadcrumbs,
   jsonLd,
 }) {
-  useEffect(() => {
-    const url = absoluteUrl(path || "/");
-    const ogImage = absoluteUrl(image || siteConfig.ogImage);
+  // Resolve absolute URLs once so both the SSR capture and the client
+  // effect below use identical values.
+  const url = absoluteUrl(path || "/");
+  const ogImage = absoluteUrl(image || siteConfig.ogImage);
 
+  // --- SSR / prerender capture (runs during render, server + client) ---
+  // On the server this feeds scripts/prerender.mjs; on the client it is
+  // a cheap no-op unless a collector is attached.
+  captureSeo({
+    title,
+    description,
+    robots,
+    canonical: url,
+    og: {
+      title,
+      description,
+      type,
+      url,
+      image: ogImage,
+      imageAlt: siteConfig.ogImageAlt,
+      siteName: siteConfig.name,
+      locale: siteConfig.locale,
+    },
+    twitter: {
+      card: siteConfig.twitterCard || "summary",
+      title,
+      description,
+      image: ogImage,
+      imageAlt: siteConfig.ogImageAlt,
+    },
+    jsonLd: [breadcrumbJsonLd(breadcrumbs), jsonLd || null].filter(Boolean),
+  });
+
+  useEffect(() => {
     if (title) document.title = title;
 
     // Standard meta

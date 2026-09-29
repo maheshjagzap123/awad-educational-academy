@@ -12,7 +12,8 @@
 import { writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
-import { indexableRoutes } from "../src/data/routes.js";
+import { indexableRoutes, buildCourseRoutes } from "../src/data/routes.js";
+import { courses } from "../src/data/content.js";
 
 const FALLBACK_SITE_URL = "https://awad-educational-academy.vercel.app";
 
@@ -27,7 +28,12 @@ const publicDir = resolve(__dirname, "..", "public");
 const lastmod = new Date().toISOString().split("T")[0];
 
 function buildSitemap() {
-  const urls = indexableRoutes
+  // Static indexable routes + one detail page per confirmed course.
+  const allRoutes = [
+    ...indexableRoutes,
+    ...buildCourseRoutes(courses),
+  ];
+  const urls = allRoutes
     .map((r) => {
       const loc = `${SITE_URL}${r.path === "/" ? "/" : r.path}`;
       return [

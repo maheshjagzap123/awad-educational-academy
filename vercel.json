@@ -1,8 +1,10 @@
 {
+  "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
     {
       "source": "/((?!assets/|.*\\.(?:xml|txt|webmanifest|png|jpg|jpeg|svg|webp|avif|ico|js|css|json|woff2?)$).*)",
-      "destination": "/index.html"
+      "destination": "/404.html"
     }
   ],
   "headers": [

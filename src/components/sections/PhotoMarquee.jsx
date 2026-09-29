@@ -41,6 +41,8 @@ export default function PhotoMarquee({
             <img
               src={img.src}
               alt={isDup ? "" : img.alt}
+              width="1600"
+              height="1066"
               loading="lazy"
               decoding="async"
             />

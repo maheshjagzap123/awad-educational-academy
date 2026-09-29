@@ -169,3 +169,65 @@ What was actually checked:
 ### Summary
 
 The website is now technically stronger for SEO, more accessible, crawler-friendly, and ready for a future custom domain — with **no changes to the existing visual design**. All content rules were respected: nothing was fabricated, and every placeholder remains clearly pending academy confirmation.
+
+
+---
+
+## 7. Second Pass — Crawlability, Content & Tracking (P0–P4)
+
+This round addressed the single biggest remaining risk from the checklist: **the site was a pure client-side SPA, so crawlers received an empty `<div id="root">` shell with no text or per-page metadata.** Everything below preserves the existing design and the "verified data only" rule.
+
+### 7.1 P0 — Build-time prerendering (crawlability)
+The 8 static routes, every confirmed course page, and the 404 are now **prerendered to real HTML at build time**. Googlebot and non-JS crawlers get full content plus correct per-page `<title>`, description, canonical, robots, Open Graph, Twitter, and JSON-LD. The client then **hydrates** the same markup.
+
+- `src/App.jsx` — router removed from here; now exports just the `<Routes>` tree so it can be wrapped by `BrowserRouter` (client) or `StaticRouter` (build).
+- `src/main.jsx` — wraps `App` in `BrowserRouter`; uses `hydrateRoot` when prerendered markup exists, else `createRoot`.
+- `src/entry-server.jsx` — server entry: renders a route to an HTML string and returns the SEO data captured during render.
+- `src/hooks/useSeo.js` — now also **captures the resolved SEO synchronously during render** (via `setSeoCollector`) so the prerender can build a real `<head>`. Client behaviour is unchanged (the collector is a no-op on the client).
+- `vite.config.js` — one config, two builds: normal client build + an SSR build emitted to `dist/server/`.
+- `scripts/prerender.mjs` — renders each route, strips the static SEO fallback from the shell, injects per-route head + JSON-LD, and writes `dist/<route>/index.html` (+ `dist/404.html`).
+- `package.json` — `build` = `vite build` → `vite build --ssr` → `node scripts/prerender.mjs`.
+- `vercel.json` — `cleanUrls: true`, `trailingSlash: false`; SPA fallback now points at `/404.html`.
+
+**Verified:** `npm run build` produces 14 route HTML files + `404.html`; the home page ships ~50 KB of real HTML with `<h1>`, "Kaij"/"Foundation" body text, WebSite + EducationalOrganization schema; each route has exactly one `<title>` and one canonical, with the correct per-page values (e.g. `/courses/foundation-program` → Course + BreadcrumbList schema, `index, follow`).
+
+### 7.2 P1 — Organization / LocalBusiness schema
+`organizationJsonLd()` (previously dead code) is now rendered on the home page inside a `@graph` alongside the `WebSite` entity, giving Google a proper business entity (`name`, `url`, `logo`, `image`, `address`, `telephone`, `@id`). `sameAs` is still emitted **only** when the academy confirms official profiles. No ratings, reviews, or hours are invented.
+
+### 7.3 P2 — Course pages & FAQ (content SEO)
+- **Course detail pages** are now indexable for confirmed courses, carry `Course` JSON-LD (verified fields + `provider` = the academy), and are included in `sitemap.xml` via `buildCourseRoutes(courses)`.
+- **New `/faq` page** (`src/pages/FaqPage.jsx`, content in `src/data/faqs.js`) with genuine, honest FAQs as real HTML text plus `FAQPage` structured data. Added to the primary nav and the sitemap. Questions the academy has not confirmed (exact timings, demo classes, material) direct the reader to call rather than inventing answers.
+
+### 7.4 P3 — Image SEO / Core Web Vitals
+- Added intrinsic `width`/`height` to fixed-size images (gallery `1600×1066`, marquee, navbar/footer/hero logos `757×407`) to prevent layout shift (CLS).
+- The hero logo (LCP candidate) is eager-loaded with `fetchPriority="high"` — **not** lazy-loaded.
+- Faculty and About-management photos rely on CSS `aspect-ratio` boxes (already present) so space is reserved even before dimensions are known.
+- Alt text and below-the-fold lazy-loading were already correct and were left as-is.
+- **Follow-up (not done):** convert JPEG gallery photos to WebP/AVIF + responsive `srcset`. This needs an image pipeline and is deferred; current JPEGs are acceptable for launch.
+
+### 7.5 P4 — Analytics & conversion tracking (inert until enabled)
+`src/lib/analytics.js` loads GA4 **only** when `VITE_GA_MEASUREMENT_ID` is set — with no ID, no script loads and no data is sent. Wired events: `page_view` (per route), `phone_click`, `whatsapp_click`, `map_click` (delegated link listener in `Layout`), `contact_form_start` + `contact_form_submit` (Contact page), and `course_view` (course pages). Documented in `.env.example`.
+
+---
+
+## 8. External / Manual Tasks (cannot be done in code)
+
+These require academy-owned accounts, real credentials, or assets, and must be completed by the academy/owner. Nothing here should be faked.
+
+| # | Task | Status | Notes |
+|---|------|--------|-------|
+| 1 | **Custom domain** | ☐ Pending | Buy/connect an academy-owned domain (e.g. `awadeducationalacademy.in`). Then set `VITE_SITE_URL` to it and redeploy — canonical, OG, sitemap, robots all update from that one value. |
+| 2 | **Google Search Console** | ☐ Pending | Verify the domain, submit `https://<domain>/sitemap.xml`, inspect the home + key pages, request indexing, then monitor coverage & queries. |
+| 3 | **GA4 property** | ☐ Pending | Create a GA4 property, copy the `G-XXXXXXXXXX` Measurement ID into `VITE_GA_MEASUREMENT_ID` (hosting env vars). Tracking code is already wired and inert until then. |
+| 4 | **Google Business Profile** | ☐ Pending | Claim & verify the Kaij listing. Confirm name, address, phone, category (e.g. *Coaching centre*), hours, website (the new domain), photos, and respond to reviews. Biggest lever for "coaching classes near me" / "in Kaij". |
+| 5 | **NAP consistency** | ☐ Verify | Confirm the academy's official Name/Address/Phone and reconcile against the Justdial/GBP listings. The site pulls NAP from `siteConfig.js`; correct it there if the official details differ (do not blindly copy directories). |
+| 6 | **Social preview image** | ☐ Pending | Provide a ~1200×630 branded image ("Awad Educational Academy — Kaij, Beed"). Add it to `/public`, then point `siteConfig.ogImage` at it (currently the logo is used). |
+| 7 | **`sameAs` social/business profiles** | ☐ Pending | Provide official Google Business, Instagram, Facebook, YouTube URLs; set them in `siteConfig.js` and they flow into schema automatically. |
+| 8 | **Opening hours / email / WhatsApp** | ☐ Pending | Fill `workingHours`, `email`, `whatsapp` in `siteConfig.js` once confirmed — this enables the WhatsApp buttons, email links, and hours in schema. |
+| 9 | **Faculty / results / testimonials** | ☐ Pending | Replace the empty faculty list, empty results, and the clearly-marked sample testimonials in `src/data/content.js` with genuine, academy-approved data. Their pages/schema will populate automatically. |
+| 10 | **Enquiry form backend** | ☐ Pending | The form currently composes a phone/WhatsApp-friendly message client-side. Wire a form service or backend when available. |
+| 11 | **Android app "Download" button** | ☐ Hold | Public trackers suggest the app was removed from Google Play (Feb 2025). Do **not** add a Play Store button until the academy confirms the current official status. |
+| 12 | **Lighthouse / Core Web Vitals** | ☐ Recommended | Run Lighthouse (mobile) on the live domain for LCP/INP/CLS. If more speed is wanted, route-level `React.lazy` code-splitting is the main lever (deferred to avoid behaviour changes now). |
+| 13 | **Rich Results validation** | ☐ Recommended | Validate Organization / Course / FAQ / Breadcrumb schema in Google's Rich Results Test once live. |
+
+> **Content principle carried through both passes:** nothing was fabricated. Every unconfirmed detail either stays a clearly-marked placeholder or directs users to contact the academy.

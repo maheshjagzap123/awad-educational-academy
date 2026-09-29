@@ -11,6 +11,7 @@ import siteConfig, {
   mapEmbedUrl,
 } from "../config/siteConfig";
 import { courses } from "../data/content";
+import { trackEvent } from "../lib/analytics";
 import "./pages.css";
 
 export default function ContactPage() {
@@ -28,6 +29,14 @@ export default function ContactPage() {
   const [params] = useSearchParams();
   const preselected = params.get("course") || "";
   const [submitted, setSubmitted] = useState(false);
+  const [started, setStarted] = useState(false);
+
+  // Fire contact_form_start once, when the user first interacts with the form.
+  const handleFormStart = () => {
+    if (started) return;
+    setStarted(true);
+    trackEvent("contact_form_start");
+  };
 
   const waHref = hasWhatsApp
     ? `https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(siteConfig.whatsappMessage)}`
@@ -46,6 +55,7 @@ export default function ContactPage() {
     if (waHref) {
       window.open(`https://wa.me/${siteConfig.whatsapp}?text=${text}`, "_blank", "noopener");
     }
+    trackEvent("contact_form_submit", { course: course || "unspecified" });
     setSubmitted(true);
     e.target.reset();
   };
@@ -126,7 +136,7 @@ export default function ContactPage() {
                 call us at {siteConfig.phone}.
               </div>
             )}
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} onFocusCapture={handleFormStart}>
               <div className="field">
                 <label htmlFor="name">Full Name</label>
                 <input id="name" name="name" type="text" required autoComplete="name" />

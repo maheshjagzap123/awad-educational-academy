@@ -52,6 +52,8 @@ export default function GalleryPage() {
                       img.alt ||
                       `Awad Educational Academy${img.category ? ` — ${img.category}` : ""}, Kaij, Beed`
                     }
+                    width="1600"
+                    height="1066"
                     loading="lazy"
                     decoding="async"
                   />

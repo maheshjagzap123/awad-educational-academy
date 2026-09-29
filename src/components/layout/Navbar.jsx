@@ -33,7 +33,13 @@ export default function Navbar() {
     <header className={`nav ${scrolled ? "nav--scrolled" : ""}`}>
       <div className="container nav__inner">
         <Link to="/" className="nav__brand" aria-label={`${siteConfig.name} home`}>
-          <img src={siteConfig.logo} alt={`${siteConfig.name} logo`} className="nav__logo" />
+          <img
+            src={siteConfig.logo}
+            alt={`${siteConfig.name} logo`}
+            className="nav__logo"
+            width="757"
+            height="407"
+          />
         </Link>
 
         <nav className="nav__links" aria-label="Primary">

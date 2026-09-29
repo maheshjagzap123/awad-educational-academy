@@ -44,7 +44,13 @@ export default function Hero() {
 
         <div className="hero__visual" aria-hidden="true">
           <div className="hero__card hero__card--logo">
-            <img src={siteConfig.logo} alt="" />
+            <img
+              src={siteConfig.logo}
+              alt=""
+              width="757"
+              height="407"
+              fetchPriority="high"
+            />
           </div>
           <div className="hero__chip hero__chip--1">
             <span className="hero__chip-icon">

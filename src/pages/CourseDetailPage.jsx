@@ -1,15 +1,42 @@
+import { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 import Layout from "../components/layout/Layout";
 import PageHero from "../components/ui/PageHero";
 import ComingSoon from "../components/ui/ComingSoon";
 import useSeo from "../hooks/useSeo";
+import siteConfig, { SITE_URL, postalAddress } from "../config/siteConfig";
 import { courses } from "../data/content";
+import { trackEvent } from "../lib/analytics";
 import "./pages.css";
 
 export default function CourseDetailPage() {
   const { slug } = useParams();
   const course = courses.find((c) => c.slug === slug);
+
+  useEffect(() => {
+    if (course) trackEvent("course_view", { course_name: course.name, slug: course.slug });
+  }, [course]);
+
+  // Course JSON-LD — verified fields only (no fake ratings/offers).
+  const courseJsonLd =
+    course && course.confirmed
+      ? {
+          "@context": "https://schema.org",
+          "@type": "Course",
+          name: course.name,
+          description: course.shortDescription,
+          url: SITE_URL ? `${SITE_URL}/courses/${course.slug}` : undefined,
+          inLanguage: "en-IN",
+          provider: {
+            "@type": "EducationalOrganization",
+            name: siteConfig.name,
+            url: SITE_URL || undefined,
+            address: postalAddress,
+            telephone: siteConfig.phone,
+          },
+        }
+      : null;
 
   useSeo({
     title: `${course ? course.name : "Course"} | Awad Educational Academy`,
@@ -25,6 +52,7 @@ export default function CourseDetailPage() {
       { name: "Courses", path: "/courses" },
       { name: course ? course.name : "Course", path: `/courses/${slug}` },
     ],
+    jsonLd: courseJsonLd,
   });
 
   if (!course) {

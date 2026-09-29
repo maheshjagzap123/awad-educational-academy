@@ -7,6 +7,7 @@ export const navLinks = [
   { label: "Results", path: "/results" },
   { label: "Gallery", path: "/gallery" },
   { label: "Testimonials", path: "/testimonials" },
+  { label: "FAQ", path: "/faq" },
   { label: "Contact", path: "/contact" },
 ];
 

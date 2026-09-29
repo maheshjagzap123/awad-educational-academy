@@ -25,7 +25,12 @@ import FacultyCard from "../components/ui/FacultyCard";
 import EmptyState from "../components/ui/EmptyState";
 import Reveal from "../components/ui/Reveal";
 import useSeo from "../hooks/useSeo";
-import siteConfig, { hasWhatsApp, directionsUrl, mapEmbedUrl } from "../config/siteConfig";
+import siteConfig, {
+  hasWhatsApp,
+  directionsUrl,
+  mapEmbedUrl,
+  organizationJsonLd,
+} from "../config/siteConfig";
 import { courses, whyChooseUs, faculty, testimonials, galleryImages } from "../data/content";
 import "./HomePage.css";
 
@@ -45,11 +50,20 @@ export default function HomePage() {
     description:
       "Awad Educational Academy is an educational institute in Kaij, Beed, Maharashtra. Explore courses, faculty, results and contact information. Enquire today.",
     path: "/",
+    // A single @graph carrying both the WebSite entity and the fuller
+    // EducationalOrganization (name, url, logo, image, address, phone,
+    // and sameAs once official profiles are confirmed). Verified data
+    // only — no ratings, reviews, hours or social links are invented.
     jsonLd: {
       "@context": "https://schema.org",
-      "@type": "WebSite",
-      name: siteConfig.name,
-      url: siteConfig.siteUrl || undefined,
+      "@graph": [
+        {
+          "@type": "WebSite",
+          name: siteConfig.name,
+          url: siteConfig.siteUrl || undefined,
+        },
+        organizationJsonLd(),
+      ],
     },
   });
 

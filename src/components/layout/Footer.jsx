@@ -11,7 +11,14 @@ export default function Footer() {
     <footer className="footer">
       <div className="container footer__grid">
         <div className="footer__brand">
-          <img src={siteConfig.logo} alt={`${siteConfig.name} logo`} className="footer__logo" />
+          <img
+            src={siteConfig.logo}
+            alt={`${siteConfig.name} logo`}
+            className="footer__logo"
+            width="757"
+            height="407"
+            loading="lazy"
+          />
           <p className="footer__desc">
             A professional educational institute serving students in {siteConfig.city},{" "}
             {siteConfig.district}, {siteConfig.state}.

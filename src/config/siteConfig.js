@@ -157,8 +157,8 @@ export function organizationJsonLd() {
   ].filter(Boolean);
 
   const org = {
-    "@context": "https://schema.org",
     "@type": "EducationalOrganization",
+    "@id": siteConfig.siteUrl ? `${siteConfig.siteUrl}/#organization` : undefined,
     name: siteConfig.name,
     description: siteConfig.description,
     telephone: siteConfig.phone,
