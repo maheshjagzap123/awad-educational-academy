@@ -29,12 +29,14 @@
 }
 
 .footer__logo {
-  height: 48px;
+  height: 44px;
   width: auto;
+  display: block;
   background: #fff;
-  padding: 6px 10px;
-  border-radius: 10px;
-  margin-bottom: 12px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  margin-bottom: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
 }
 .footer__desc {
   font-size: 0.95rem;
