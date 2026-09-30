@@ -27,7 +27,7 @@
   flex-shrink: 0;
 }
 .nav__logo {
-  height: 40px;
+  height: 44px;
   width: auto;
   object-fit: contain;
 }
@@ -112,7 +112,7 @@
 /* Tablet / desktop */
 @media (min-width: 900px) {
   .nav__logo {
-    height: 46px;
+    height: 52px;
   }
   .nav__links {
     display: flex;
